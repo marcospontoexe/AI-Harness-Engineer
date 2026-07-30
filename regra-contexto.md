@@ -6,8 +6,7 @@
 
 ## Objetivo
 
-Garantir que nenhum trabalho se perca quando a janela de contexto encher. Ao atingir **70% da janela de contexto**, o agente deve gravar todo o estado da sessão em um arquivo de handoff, de forma que **qualquer outro chat consiga retomar exatamente de onde parou**, com o mesmo contexto.
-
+Garantir que nenhum trabalho se perca quando a sessão atual se tornar demasiado longa. O agente deve gravar todo o estado da sessão num ficheiro de handoff, de forma que **qualquer outro chat consiga retomar exatamente de onde parou**, com o mesmo contexto.
 ---
 
 ## Gatilho
@@ -83,11 +82,11 @@ da seção 3 / passo X."
 
 No início de qualquer nova sessão, o agente deve:
 
-1. Verificar se existe `CONTEXTO.md` na raiz do projeto.
+1. Verificar se existe o ficheiro `CONTEXTO.md` na raiz do projeto (ou em `.claude/`).
 2. Se existir, **lê-lo por completo antes de qualquer outra ação**.
-3. Resumir ao usuário em 2–3 linhas onde o trabalho parou e qual é o próximo passo, e então continuar.
+3. Resumir ao utilizador em 2–3 linhas onde o trabalho parou e qual é o próximo passo, e então continuar.
 
-> Comando sugerido para o usuário iniciar um novo chat:
+> Comando sugerido para o utilizador iniciar um novo chat:
 > **"Leia o `CONTEXTO.md` e continue de onde a sessão anterior parou."**
 
 ---
@@ -99,4 +98,6 @@ No início de qualquer nova sessão, o agente deve:
 - **Não salve segredos** (tokens, senhas, chaves) no `CONTEXTO.md`.
 - **Um arquivo por projeto:** mantenha o `CONTEXTO.md` enxuto; arquive versões antigas em `CONTEXTO.arquivo.md` se necessário.
 - **Commit opcional:** se o usuário usar git, ofereça commitar o `CONTEXTO.md` para que ele persista entre máquinas.
-- Caso algum arquivo seja alterado, sempre informe qual arquivo e oque foi alterado no final de cada mensagem.
+- **Feedback de alterações:** Caso algum ficheiro seja alterado durante a sessão, informe sempre qual o ficheiro e o que foi alterado no final de cada mensagem.
+
+
