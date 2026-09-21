@@ -1,6 +1,6 @@
 # Regra: Persistência de Contexto (Handoff entre sessões)
 
-> Cole esta regra no `CLAUDE.md` do projeto (ou em `~/.claude/CLAUDE.md` para aplicar a **todos** os chats do Claude Code).
+> Cole esta regra no `CLAUDE.md` do projeto.
 
 ---
 
@@ -26,7 +26,7 @@ Execute o procedimento de salvamento abaixo **antes de continuar qualquer tarefa
    - Sempre atualize o campo de data/hora e o número da sessão.
 3. Preencha **todas** as seções do template abaixo. Não deixe seções vazias — escreva "nenhum" quando não houver conteúdo.
 4. Confirme ao usuário que o contexto foi salvo e informe o caminho do arquivo.
-5. **Gestão do CLAUDE.md:** Mantenha este ficheiro (`CLAUDE.md`) enxuto. Além destas regras de sistema, adicione ao `CLAUDE.md` apenas um **índice** que aponte para ficheiros com o contexto detalhado de cada tópico. Estes ficheiros detalhados devem ficar no diretório `DOCS/` na raiz do projeto. O objetivo é não sobrecarregar a janela de contexto; caso precise de mais informações sobre um tópico, aceda ao ficheiro específico em `DOCS/`.
+5. **Gestão do CONTEXTO.md:** Mantenha estes arquivos enxuto. Além destas regras de sistema, adicione ao `CONTEXTO.md` apenas um **índice** que aponte para ficheiros com o contexto detalhado de cada tópico. Estes ficheiros detalhados devem ficar no diretório `DOCS/` na raiz do projeto. O objetivo é não sobrecarregar a janela de contexto ao ler e `CONTEXTO.md` no diretorio raiz; caso precise de mais informações sobre um tópico, aceda ao ficheiro específico em `DOCS/`.
 
 ---
 
@@ -82,7 +82,7 @@ da seção 3 / passo X."
 
 No início de qualquer nova sessão, o agente deve:
 
-1. Verificar se existe o ficheiro `CONTEXTO.md` na raiz do projeto (ou em `.claude/`).
+1. Verificar se existe o ficheiro e `CONTEXTO.md` na raiz do projeto .
 2. Se existir, **lê-lo por completo antes de qualquer outra ação**.
 3. Resumir ao utilizador em 2–3 linhas onde o trabalho parou e qual é o próximo passo, e então continuar.
 
@@ -95,9 +95,9 @@ No início de qualquer nova sessão, o agente deve:
 
 - **Escreva para um estranho:** o próximo chat não tem memória nenhuma; seja explícito.
 - **Caminhos absolutos ou relativos à raiz**, nunca referências vagas ("aquele arquivo").
-- **Não salve segredos** (tokens, senhas, chaves) no `CONTEXTO.md`.
-- **Um arquivo por projeto:** mantenha o `CONTEXTO.md` enxuto; arquive versões antigas em `CONTEXTO.arquivo.md` se necessário.
-- **Commit opcional:** se o usuário usar git, ofereça commitar o `CONTEXTO.md` para que ele persista entre máquinas.
+- **Não salve segredos** (tokens, senhas, chaves) no `CLAUDE.md` e `CONTEXTO.md`.
+- **Um arquivo por projeto:** mantenha `CONTEXTO.md` enxuto; arquive versões antigas em `CONTEXTO.arquivo.md` se necessário.
+- **Commit opcional:** se o usuário usar git, ofereça commitar o e `CONTEXTO.md` para que ele persista entre máquinas.
 - **Feedback de alterações:** Caso algum ficheiro seja alterado durante a sessão, informe sempre qual o ficheiro e o que foi alterado no final de cada mensagem.
 - **referenciar diretórios e arquivos atraves de links:** Sempre que se referir a um diretório ou arquivo local, use link e não backticks.
 
