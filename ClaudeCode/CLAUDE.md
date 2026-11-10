@@ -1,105 +1,41 @@
+> Cole estas regras no `CLAUDE.md` do projeto, ou no `~/.claude/CLAUDE.md` para valerem em todos os projetos. A regra de handoff usa a skill [salvar-contexto](skills/salvar-contexto/SKILL.md): copie a pasta dela para `~/.claude/skills/` (todos os projetos) ou para `.claude/skills/` do projeto.
+
+---
+
+# Preferências gerais
+
+- **Feedback de alterações:** caso algum arquivo seja alterado durante a sessão, informe sempre qual o arquivo, usando link, e o que foi alterado no final de cada mensagem.
+- **Referenciar diretórios e arquivos através de links:** sempre que se referir a um diretório ou arquivo local, use link e não backticks.
+- **Comentários:** sempre coloque comentários explicativos em todo código que escrever.
+
+---
+
 # Regra: Persistência de Contexto (Handoff entre sessões)
 
-> Cole esta regra no `CLAUDE.md` do projeto.
+Nenhum trabalho pode se perder quando a sessão fica longa demais: o estado da sessão vai para um arquivo de handoff, e **qualquer outro chat retoma exatamente de onde parou**, com o mesmo contexto.
 
----
+## Quando salvar
 
-## Objetivo
+Use a skill `salvar-contexto` **antes de continuar qualquer tarefa** sempre que uma das seguintes condições for atingida:
 
-Garantir que nenhum trabalho se perca quando a sessão atual se tornar demasiado longa. O agente deve gravar todo o estado da sessão num ficheiro de handoff, de forma que **qualquer outro chat consiga retomar exatamente de onde parou**, com o mesmo contexto.
----
-
-## Gatilho
-
-Execute o procedimento de salvamento abaixo **antes de continuar qualquer tarefa** sempre que uma das seguintes condições for atingida:
 1. A conversa prolongar-se por muitas interações (aproximando-se do limite prático da janela de contexto).
 2. Uma funcionalidade ou milestone importante for concluída.
-3. O utilizador disser explicitamente: `salvar contexto`, `handoff` ou `checkpoint`.
+3. O usuário disser explicitamente: `salvar contexto`, `handoff` ou `checkpoint`.
 
----
+> O agente não sabe com precisão quanto da janela de contexto já usou. O gatilho confiável é o comando explícito do item 3; além dele, salve por conta própria ao concluir cada bloco grande de trabalho.
 
-## Procedimento de salvamento
-
-1. **Termine** a tarefa atual.
-2. Crie ou atualize o arquivo **`CONTEXTO.md`** na raiz do projeto.
-   - Se já existir, **atualize** as seções em vez de duplicar (mantenha o histórico relevante, remova o que já foi superado).
-   - Sempre atualize o campo de data/hora e o número da sessão.
-3. Preencha **todas** as seções do template abaixo. Não deixe seções vazias — escreva "nenhum" quando não houver conteúdo.
-4. Confirme ao usuário que o contexto foi salvo e informe o caminho do arquivo usando link.
-5. **Gestão do CONTEXTO.md:**  Mantenha o CONTEXTO.md enxuto. Ele segue o template abaixo, mas cada seção deve ter só o resumo. Quando um tópico precisar de mais detalhe (uma decisão longa, um passo a passo, etc.), escreva-o num ficheiro em DOCS/ na raiz do projeto e coloque no CONTEXTO.md apenas o link para ele. O objetivo é não sobrecarregar a janela de contexto ao ler o CONTEXTO.md. Se precisar de mais informações sobre um tópico, abra o ficheiro específico em DOCS/.
-
----
-
-## Template do `CONTEXTO.md`
-
-```markdown
-# CONTEXTO DA SESSÃO
-
-- **Última atualização:** AAAA-MM-DD HH:MM
-- **Sessão nº:** N
-- **Status geral:** (em andamento | bloqueado | pronto para revisão)
-
-## 1. Objetivo da tarefa
-Descrição em 1–3 frases do que estamos tentando alcançar (o "porquê").
-
-## 2. Já feito ✅
-- Itens concluídos, com o(s) arquivo(s) afetado(s).
-- Ex.: "Implementado endpoint POST /login em `src/auth.py`"
-
-## 3. Em andamento 🔧
-- O que estava sendo feito no momento do checkpoint.
-- Em qual arquivo/linha parei e qual era o próximo passo imediato.
-
-## 4. Próximos passos (planejado) 📋
-- Lista ordenada do que falta fazer.
-- Quanto mais específico, melhor (arquivo, função, comportamento esperado).
-
-## 5. Decisões e raciocínio 🧠
-- Escolhas técnicas feitas e o porquê.
-- Alternativas descartadas (para evitar refazer a análise).
-- Suposições assumidas.
-
-## 6. Estado do projeto / ambiente
-- Arquivos-chave e o papel de cada um.
-- Branch git atual, alterações não commitadas, migrations pendentes, etc.
-- Variáveis de ambiente ou dependências relevantes.
-
-## 7. Bloqueios e pendências ⚠️
-- Erros não resolvidos, dúvidas para o usuário, decisões aguardando aprovação.
-
-## 8. Comandos úteis
-- Comandos para rodar/testar/buildar o projeto.
-- Ex.: `npm run dev`, `pytest tests/`, etc.
-
-## 9. Como retomar
-Instrução direta para o próximo chat: "Leia este arquivo e continue a partir
-da seção 3 / passo X."
-```
-
----
+Se a skill não estiver instalada, avise o usuário em vez de improvisar outro formato.
 
 ## Como retomar em um novo chat
 
 No início de qualquer nova sessão, o agente deve:
 
-1. Verificar se existe o ficheiro `CONTEXTO.md` na raiz do projeto .
+1. Verificar se existe o arquivo de handoff: o `CONTEXTO.md` na raiz do projeto (ou em `.claude/`), ou o que a regra própria do projeto definir.
 2. Se existir, **lê-lo por completo antes de qualquer outra ação**.
-3. Resumir ao utilizador em 2–3 linhas onde o trabalho parou e qual é o próximo passo, e então continuar.
+3. Resumir ao usuário em 2–3 linhas onde o trabalho parou e qual é o próximo passo, e então continuar.
 
-> Comando sugerido para o utilizador iniciar um novo chat:
+> Comando sugerido para o usuário iniciar um novo chat:
 > **"Leia o `CONTEXTO.md` e continue de onde a sessão anterior parou."**
-
----
-
-## Boas práticas
-
-- **Escreva para um estranho:** o próximo chat não tem memória nenhuma; seja explícito.
-- **Caminhos absolutos ou relativos à raiz**, nunca referências vagas ("aquele arquivo").
-- **Não salve segredos** (tokens, senhas, chaves) no `CLAUDE.md` e `CONTEXTO.md`.
-- **Um arquivo por projeto:** mantenha `CONTEXTO.md` enxuto; arquive versões antigas em `CONTEXTO.arquivo.md` se necessário.
-- **Commit opcional:** se o usuário usar git, ofereça commitar o `CONTEXTO.md` para que ele persista entre máquinas.
-- **Feedback de alterações:** Caso algum ficheiro seja alterado durante a sessão, informe sempre qual o ficheiro usando link, e o que foi alterado no final de cada mensagem.
-- **referenciar diretórios e arquivos atraves de links:** Sempre que se referir a um diretório ou arquivo local, use link e não backticks.
 
 ---
 
@@ -114,6 +50,10 @@ Vale em todas as sessões e em todos os projetos. Nunca entregue o primeiro rasc
    - links ou âncoras quebrados;
    - partes do pedido que ficaram sem fazer.
 2. **Em código, não basta ler: rode e teste.** Se não der para rodar, diga isso na entrega.
+   - **"Passou" exige três coisas:** exit code 0; o resultado dos testes aberto e lido (alguns executores, como o `colcon test`, saem com 0 mesmo com teste falhando); e a quantidade de testes esperada (se a contagem não subiu depois de acrescentar um teste, provavelmente rodou uma versão antiga do código).
+   - **Ao escrever um teste novo,** quebre o código de propósito, confirme que o teste falha e desfaça a quebra. Um teste que nunca falhou não prova nada.
 3. **Se alguma parte estiver ruim** (errada, confusa, repetitiva ou mal organizada), corrija e **releia tudo de novo**. Uma correção num lugar pode estragar outro.
-4. **Repita até você mesmo achar o resultado excelente**, e só então entregue.
+4. **Repita até você mesmo achar o resultado excelente** — quer dizer: uma releitura completa sem nada a corrigir e cada parte do pedido conferida. Só então entregue.
 5. **Não invente para fechar uma lacuna.** Se faltar algo que só o usuário pode resolver (um fato ou uma decisão), avise na entrega.
+6. **Conclua só com evidência.** Antes de afirmar uma causa ou um resultado, abra a evidência direta: o log, a saída do comando, o arquivo. Não conclua por sintoma indireto ("demorou", "não deu erro"). Sem a evidência, escreva "não verifiquei" em vez de afirmar.
+7. **Diga na entrega o que ficou sem verificar**, além do que ficou sem fazer.
